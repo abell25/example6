@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">example6</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="save">Save</string>
+    <string name="name">Name: </string>
+    <string name="address">Address: </string>
+    <string name="type">Type: </string>
+    <string name="takeout">Take-Out</string>
+    <string name="sitdown">Sit-Down</string>
+    <string name="delivery">Delivery</string>
+    <string name="notes">Notes:</string>
+	<string name="delete">Delete</string>
+	<string name="list">List</string>
+	<string name="details">Details</string>
+	<string name="english">English</string>
+	<string name="spanish">Spanish</string>
+</resources>
