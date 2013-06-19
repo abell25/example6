@@ -3,10 +3,12 @@ package com.example.example6;
 import java.util.Locale;
 
 import android.os.Bundle;
+import android.provider.SyncStateContract.Helpers;
 import android.app.Activity;
 import android.app.TabActivity;
 import android.content.ClipData.Item;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -37,6 +39,7 @@ public class MainActivity extends TabActivity {
 	RestaurantHelper helper = null;
 	Integer _id = null;
 	Button save;
+	Button update;
 	Button delete;
 	MenuItem english;
 	MenuItem spanish;
@@ -54,9 +57,11 @@ public class MainActivity extends TabActivity {
 		types = (RadioGroup) findViewById(R.id.types);
 
 		save = (Button) findViewById(R.id.save);
+		update = (Button) findViewById(R.id.update);
 		delete = (Button) findViewById(R.id.delete);
 		
 		save.setOnClickListener(onSave);
+		update.setOnClickListener(onUpdate);
 		delete.setOnClickListener(onDelete);
 		
 		ListView list = (ListView) findViewById(R.id.restaurants);
@@ -76,10 +81,24 @@ public class MainActivity extends TabActivity {
 		spec.setContent(R.id.details);
 		spec.setIndicator(getString(R.string.details),
 				getResources().getDrawable(R.drawable.restaurant));
+		
 		getTabHost().addTab(spec);
 
 		getTabHost().setCurrentTab(0);
-
+		
+		getTabHost().setOnTabChangedListener(new TabHost.OnTabChangeListener() {			
+			public void onTabChanged(String tabId) {
+				
+				if (tabId.equals("tag1")) {
+					_id = null;
+					name.setText("");
+					address.setText("");
+					types.check(R.id.sit_down);
+					notes.setText("");
+				}
+				
+			}
+		});
 		list.setOnItemClickListener(onListClick);
 	}
 	
@@ -122,15 +141,10 @@ public class MainActivity extends TabActivity {
 				break;
 			}
 			String message = name.getText().toString();
-			if (_id == null) {
-				helper.insert(name.getText().toString(), address.getText()
+				
+			helper.insert(name.getText().toString(), address.getText()
 							.toString(), type, notes.getText().toString());
-				message += " inserted successfully";
-			} else {
-				helper.update(_id, name.getText().toString(), address.getText()
-						.toString(), type, notes.getText().toString());
-				message += " updated successfully";
-			}
+			message += " inserted successfully";
 			
 			_id = null;
 			name.setText("");
@@ -148,17 +162,47 @@ public class MainActivity extends TabActivity {
 		}
 	};
 	
-	private View.OnClickListener onDelete = new View.OnClickListener() {
+	private View.OnClickListener onUpdate = new View.OnClickListener() {
+		public void onClick(View v) {
+			String type = null;
+
+			switch (types.getCheckedRadioButtonId()) {
+			case R.id.sit_down:
+				type = "sit_down";
+				break;
+			case R.id.take_out:
+				type = "take_out";
+				break;
+			case R.id.delivery:
+				type = "delivery";
+				break;
+			}
+			String message = name.getText().toString();
+			if (_id == null) {
+				helper.insert(name.getText().toString(), address.getText()
+							.toString(), type, notes.getText().toString());
+				message += " inserted successfully";
+			} else {
+				helper.update(_id, name.getText().toString(), address.getText()
+						.toString(), type, notes.getText().toString());
+				message += " updated successfully";
+			}
+			
+			getTabHost().setCurrentTab(0);
+			InputMethodManager imm = (InputMethodManager)getSystemService(
+				      Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(name.getWindowToken(), 0);
+			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+			
+			model.requery();
+		}
+	};
+	
+	public View.OnClickListener onDelete = new View.OnClickListener() {
 		public void onClick(View v) {			
 			helper.delete(_id);
 			
 			String message = name.getText() + " deleted successfully!";
-			
-			_id = null;
-			name.setText("");
-			address.setText("");
-			types.check(R.id.sit_down);
-			notes.setText("");
 			
 			getTabHost().setCurrentTab(0);
 			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
@@ -221,7 +265,7 @@ public class MainActivity extends TabActivity {
 		      getApplicationContext().getResources().getDisplayMetrics());
 		recreate();
 	}
-	
+
 	public void toEnglish() {
 		Locale locale = new Locale("en");
 		Locale.setDefault(locale);
@@ -243,17 +287,27 @@ public class MainActivity extends TabActivity {
 			RestaurantHolder holder = (RestaurantHolder) row.getTag();
 			holder.populateFrom(c, helper);
 		}
-
+		
 		@Override
 		public View newView(Context context, Cursor c, ViewGroup parent) {
 			LayoutInflater inflater = getLayoutInflater();
 			View row = inflater.inflate(R.layout.row, parent, false);
+			
 			RestaurantHolder holder = new RestaurantHolder(row);
-
+			Button delete = (Button)row.findViewById(R.id.deleteButton);
+			final int position = c.getPosition();
+			delete.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					model.moveToPosition(position);
+					Integer id = helper.getId(model);
+					helper.delete(id);
+					model.requery();
+				}
+			});
 			row.setTag(holder);
-
 			return (row);
 		}
+		
 	}
 	
 	//************************ THe Restaurant Holder **********************************//
@@ -268,6 +322,13 @@ public class MainActivity extends TabActivity {
 			name = (TextView) row.findViewById(R.id.title);
 			address = (TextView) row.findViewById(R.id.address);
 			icon = (ImageView) row.findViewById(R.id.icon);
+			Button delete = (Button)row.findViewById(R.id.deleteButton);
+			delete.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					
+				}
+			});
+			
 		}
 		void populateFrom(Cursor c, RestaurantHelper helper) {
 			name.setText(helper.getName(c));

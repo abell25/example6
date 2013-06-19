@@ -31,23 +31,26 @@ public final class R {
         public static final int toast=0x7f020007;
     }
     public static final class id {
-        public static final int action_settings=0x7f08000e;
+        public static final int action_settings=0x7f080011;
         public static final int addr=0x7f080003;
-        public static final int address=0x7f08000d;
-        public static final int delete=0x7f08000a;
+        public static final int address=0x7f08000f;
+        public static final int delete=0x7f08000b;
+        public static final int deleteButton=0x7f080010;
         public static final int delivery=0x7f080007;
         public static final int details=0x7f080001;
-        public static final int english=0x7f08000f;
-        public static final int icon=0x7f08000b;
+        public static final int english=0x7f080012;
+        public static final int icon=0x7f08000d;
+        public static final int iconContainer=0x7f08000c;
         public static final int name=0x7f080002;
         public static final int notes=0x7f080008;
         public static final int restaurants=0x7f080000;
         public static final int save=0x7f080009;
         public static final int sit_down=0x7f080006;
-        public static final int spanish=0x7f080010;
+        public static final int spanish=0x7f080013;
         public static final int take_out=0x7f080005;
-        public static final int title=0x7f08000c;
+        public static final int title=0x7f08000e;
         public static final int types=0x7f080004;
+        public static final int update=0x7f08000a;
     }
     public static final class layout {
         public static final int main=0x7f030000;
@@ -73,6 +76,7 @@ public final class R {
         public static final int spanish=0x7f05000f;
         public static final int takeout=0x7f050007;
         public static final int type=0x7f050006;
+        public static final int update=0x7f050010;
     }
     public static final class style {
         /** 
