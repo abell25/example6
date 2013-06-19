@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout    xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/details"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" 
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="horizontal">
+  <LinearLayout 
     android:id="@+id/iconContainer"
-    android:layout_width="fill_parent"
+    android:layout_width="100dp"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical" >
     
@@ -35,12 +42,14 @@
 			android:singleLine="true"
 			android:ellipsize="end"
 		/>
-		<Button 
+	</LinearLayout>
+  </LinearLayout>
+	<Button 
       android:id="@+id/deleteButton"
-      android:layout_width="fill_parent"
+      android:layout_width="130dp"
       android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginRight="40dp"
       android:text="@string/delete" /> 
 
-	</LinearLayout>
- 
 </LinearLayout>
